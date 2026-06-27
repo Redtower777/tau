@@ -35,7 +35,7 @@ function getClipboardCommands() {
   // Use CLAUDE_CODE_TMPDIR if set, otherwise fall back to platform defaults
   const baseTmpDir =
     process.env.CLAUDE_CODE_TMPDIR ||
-    (platform === 'win32' ? process.env.TEMP || 'C:\\Temp' : '/tmp')
+    (platform === 'win32' ? process.env.TEMP || 'C:\\Temp' : (process.env.TMPDIR || '/tmp'))
   const screenshotFilename = 'claude_cli_latest_screenshot.png'
   const tempPaths: Record<SupportedPlatform, string> = {
     darwin: join(baseTmpDir, screenshotFilename),

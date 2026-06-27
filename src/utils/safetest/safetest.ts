@@ -637,7 +637,7 @@ function deriveDefaultCommand(relativePath: string, templateKind: 'wine' | 'defa
     // xauth), or a raw Xvfb :99 server. Some templates ship Xvfb without xauth
     // and that breaks xvfb-run with "X authority files" — falling back to a
     // direct Xvfb server keeps GUI runs working in those images.
-    'ensure_display() { if [ -n "$DISPLAY" ]; then return 0; fi; if command -v xvfb-run >/dev/null 2>&1 && command -v xauth >/dev/null 2>&1; then export __SAFETEST_DISPLAY_MODE=xvfb-run; return 0; fi; if command -v Xvfb >/dev/null 2>&1; then if [ -z "$XAUTHORITY" ]; then export XAUTHORITY="$HOME/.Xauthority"; fi; [ -f "$XAUTHORITY" ] || touch "$XAUTHORITY"; Xvfb :99 -screen 0 1280x1024x24 -nolisten tcp >/tmp/xvfb.log 2>&1 & __SAFETEST_XVFB_PID=$!; sleep 1; export DISPLAY=:99 __SAFETEST_DISPLAY_MODE=xvfb-direct; return 0; fi; return 1; }',
+    'ensure_display() { if [ -n "$DISPLAY" ]; then return 0; fi; if command -v xvfb-run >/dev/null 2>&1 && command -v xauth >/dev/null 2>&1; then export __SAFETEST_DISPLAY_MODE=xvfb-run; return 0; fi; if command -v Xvfb >/dev/null 2>&1; then if [ -z "$XAUTHORITY" ]; then export XAUTHORITY="$HOME/.Xauthority"; fi; [ -f "$XAUTHORITY" ] || touch "$XAUTHORITY"; Xvfb :99 -screen 0 1280x1024x24 -nolisten tcp >"${TMPDIR:-/tmp}/xvfb.log" 2>&1 & __SAFETEST_XVFB_PID=$!; sleep 1; export DISPLAY=:99 __SAFETEST_DISPLAY_MODE=xvfb-direct; return 0; fi; return 1; }',
     'cleanup_display() { if [ -n "$__SAFETEST_XVFB_PID" ]; then kill "$__SAFETEST_XVFB_PID" 2>/dev/null || true; unset __SAFETEST_XVFB_PID; fi; }',
     // run_with_display: route Python/Node/Java/etc through ensure_display
     // when a display CAN be set up, so GUI libraries (tkinter, PyQt, pygame,
