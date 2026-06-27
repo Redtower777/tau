@@ -33,7 +33,7 @@ import { useTerminalSize } from '../../hooks/useTerminalSize.js';
 import { useTypeahead } from '../../hooks/useTypeahead.js';
 import type { BorderTextOptions } from '../../ink/render-border.js';
 import { stringWidth } from '../../ink/stringWidth.js';
-import { Box, type ClickEvent, type Key, Text, useInput } from '../../ink.js';
+import { Box, type ClickEvent, type Key, Text, useInput, useTheme } from '../../ink.js';
 import { useOptionalKeybindingContext } from '../../keybindings/KeybindingContext.js';
 import { getShortcutDisplay } from '../../keybindings/shortcutFormat.js';
 import { useKeybinding, useKeybindings } from '../../keybindings/useKeybinding.js';
@@ -240,6 +240,8 @@ function PromptInput({
   isCenteredPrompt = false
 }: Props): React.ReactNode {
   const mainLoopModel = useMainLoopModel();
+  const [themeName] = useTheme();
+  const isLightTheme = themeName.startsWith('light');
   // A local-jsx command (e.g., /mcp while agent is running) renders a full-
   // screen dialog on top of PromptInput via the immediate-command path with
   // shouldHidePromptInput: false. Those dialogs don't register in the overlay
@@ -2253,7 +2255,7 @@ function PromptInput({
     // Studio prompt frame: left bar + filled panel + ╵ foot.
     return <>
         <Box flexDirection="row" alignItems="center" justifyContent="center" borderColor={getBorderColor()} borderStyle="round" borderTop={false} borderRight={false} borderBottom={false} width="100%">
-          <Box flexGrow={1} paddingLeft={1} paddingY={1} backgroundColor="backgroundElement">
+          <Box flexGrow={1} paddingLeft={1} paddingY={1} backgroundColor={isLightTheme ? undefined : "backgroundElement"}>
             <Text dimColor italic>
               Save and close editor to continue...
             </Text>
@@ -2292,7 +2294,7 @@ function PromptInput({
         </> : <>
           {/* Studio prompt frame: rounded card around a filled input panel. */}
           <Box flexDirection="row" alignItems="flex-start" justifyContent="flex-start" borderColor={getBorderColor()} borderStyle="round" width="100%">
-            <Box flexDirection="row" flexGrow={1} flexShrink={1} paddingX={1} backgroundColor="backgroundElement" onClick={handleInputClick}>
+            <Box flexDirection="row" flexGrow={1} flexShrink={1} paddingX={1} backgroundColor={isLightTheme ? undefined : "backgroundElement"} onClick={handleInputClick}>
               <PromptInputModeIndicator mode={mode} isLoading={isLoading} viewingAgentName={viewingAgentName} viewingAgentColor={viewingAgentColor} />
               <Box flexGrow={1} flexShrink={1}>
                 {textInputElement}
