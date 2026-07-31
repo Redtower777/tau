@@ -149,7 +149,7 @@ const tauPlugin = {
       namespace: 'bun-bundle-shim',
     }))
     build.onLoad({ filter: /.*/, namespace: 'bun-bundle-shim' }, () => ({
-      contents: `export function feature(_name) { return false; }`,
+      contents: `export function feature(name) { return name === 'KAIROS_CHANNELS'; }`,
       loader: 'js',
     }))
 

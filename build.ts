@@ -122,7 +122,7 @@ const result = await Bun.build({
         build.onLoad(
           { filter: /.*/, namespace: 'bun-bundle-shim' },
           () => ({
-            contents: `export function feature(_name) { return false; }`,
+            contents: `export function feature(name) { return name === 'KAIROS_CHANNELS'; }`,
             loader: 'js',
           }),
         );
